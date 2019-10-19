@@ -1,0 +1,5 @@
+#General 
+/.vscode
+/botenv
+
+#activate botenv in windows  source botenv/Scripts/activate
