@@ -3,3 +3,6 @@
 /botenv
 
 #activate botenv in windows  source botenv/Scripts/activate
+
+#Data collection txt file
+*.txt
