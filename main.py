@@ -1,8 +1,8 @@
 
-import bot
+from dataGather import data
+from analyse import analyseFunctions
 import config
 
-bot.dataGather(config.limit)
-bot.analysis(bot.wordCounter())
-bot.dataCleanup(config.cleanUp)
-
+data.dataGather(5)
+analyseFunctions.analysis(analyseFunctions.wordCounter(), config.targetSub)
+data.dataCleanup(config.cleanUp, config.targetSub)

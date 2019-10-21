@@ -259,7 +259,7 @@ badword = {
 
 
 }
-print(len(badword))
+#print(len(badword))
 data = []
 #quickly gather a list of new words for sorting
 def wordPrints():
