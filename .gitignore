@@ -1,6 +1,7 @@
 #General 
 /.vscode
 /botenv
+__pycache__
 
 #activate botenv in windows  source botenv/Scripts/activate
 

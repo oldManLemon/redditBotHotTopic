@@ -1,23 +1,32 @@
 # Reddit Bot First Run
 import praw
 # Inbuilts
-import os
+from os import rename, listdir, rename, remove, path, mkdir
 from collections import Counter
+
 
 # just import the password
 import password
+import config
 
 
 # https://www.reddit.com/prefs/apps
 
-reddit = praw.Reddit(client_id='JL53WY5Cw2WK8g',
-                     client_secret='fKqCZ44PIIFdqOjemTIKab0BfEs',
+reddit = praw.Reddit(client_id=config.clientID,
+                     client_secret=config.clientSecret,
                      # password='popularWordBot!',
                      password=password.password,
-                     user_agent='popularWordBot Script',
-                     username='popularWordBot')
+                     user_agent=config.agent,
+                     username=config.username)
 
-sub = reddit.subreddit('australia')
+try:
+    print(reddit.user.me())
+except:
+    print('login in issues')
+   
+
+sub = reddit.subreddit(config.targetSub)
+
 
 
 def gatherHotPage(limit):
@@ -41,60 +50,73 @@ def readComments(submissionID):
     for comment in sub.comments.list():
         loging.write(str(20 * "-"))
         loging.write(str('\n'))
-        # loging.write('ID: '+str(comment.id)+'\n')
-        # loging.write('Parent ID: '+ str(comment.parent())+'\n')
         loging.write(str(comment.body)+'\n')
     loging.close()
 
-# Main Test
-
-
-def dataGather():
-    analyise = gatherHotPage(25)
+def dataGather(limit):
+    analyise = gatherHotPage(limit)
     for data in analyise:
         readComments(data)
+
 def listOfData():
+    '''
+    listOfData()
+    returns: array of all txt's in folder
+    '''
     listOfFilenames = []
-    for filename in os.listdir():
+    for filename in listdir():
         if filename.endswith('txt'):
             listOfFilenames.append(filename)
     return listOfFilenames
 
 
 def wordCounter():
-    # print(os.listdir())
+    '''
+    wordCounter()
+    returns: dict of words and their count
+    '''
     wordCount = {}
     dataFiles = listOfData()
-    #print(dataFiles)
+    
     for data in dataFiles:
+        count = 0
         thread = open(data, 'r+', encoding="utf-8")
         for word in thread.read().split():
             word = word.lower()
+            count +=1
             if word not in wordCount:
                 wordCount[word] = 1
             else:
                 wordCount[word] += 1
-
+        thread.close()
+    print('words scanned: '+ str(count))
     return wordCount
 
 def analysis(dataForAnalysis):
     wordCount = Counter(dataForAnalysis).most_common(n=None)
-    storeData = open('results.xml', 'w+', encoding="utf-8")
+    storeData = open(config.targetSub+'_results.xml', 'w+', encoding="utf-8")
     for item in wordCount:
         storeData.write(str(item))
         storeData.write('\n')
+    storeData.close()
 
-def dataCleanup():
+def dataCleanup(action):
     getList = listOfData()
-    print(getList)
-    for item in getList:
-        os.remove(item)
-        print(item+'.txt removed')
+    for item in getList:    
+        if action:
+            remove(item)
+            print(item+'.txt removed')
+        else:
+            if path.isdir('storage/'+config.targetSub):
+               rename(item, 'storage/'+config.targetSub+'/'+item) 
+            else:
+                mkdir('storage/'+config.targetSub)
+                rename(item, 'storage/'+config.targetSub+'/'+item)
+            
 
-dataGather()
+dataGather(config.limit)
 analysis(wordCounter())
-
-dataCleanup()
+dataCleanup(config.cleanUp)
 
 
 # sortedWords = sorted(dataForAnalysis.keys())
