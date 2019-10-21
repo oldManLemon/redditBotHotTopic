@@ -6,3 +6,5 @@
 
 #Data collection txt file
 *.txt
+#Password File
+password*
