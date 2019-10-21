@@ -8,6 +8,7 @@ from collections import Counter
 # just import the password
 import password
 import config
+from abandon import allHope
 
 
 # https://www.reddit.com/prefs/apps
@@ -80,11 +81,14 @@ def wordCounter():
     
     for data in dataFiles:
         count = 0
+        
+        
         thread = open(data, 'r+', encoding="utf-8")
         for word in thread.read().split():
             word = word.lower()
-            count +=1
-            if word not in wordCount:
+            if word in allHope.badword:
+                pass
+            elif word not in wordCount:
                 wordCount[word] = 1
             else:
                 wordCount[word] += 1
@@ -93,8 +97,10 @@ def wordCounter():
     return wordCount
 
 def analysis(dataForAnalysis):
-    wordCount = Counter(dataForAnalysis).most_common(n=None)
+    wordCount = Counter(dataForAnalysis).most_common(150)
     storeData = open(config.targetSub+'_results.xml', 'w+', encoding="utf-8")
+    extra = open('working.xml', 'w+', encoding="utf-8")
+    extra.write(str(wordCount))
     for item in wordCount:
         storeData.write(str(item))
         storeData.write('\n')
@@ -113,10 +119,11 @@ def dataCleanup(action):
                 mkdir('storage/'+config.targetSub)
                 rename(item, 'storage/'+config.targetSub+'/'+item)
             
+#print()
+# dataGather(config.limit)
+# analysis(wordCounter())
+# dataCleanup(config.cleanUp)
 
-dataGather(config.limit)
-analysis(wordCounter())
-dataCleanup(config.cleanUp)
 
 
 # sortedWords = sorted(dataForAnalysis.keys())
