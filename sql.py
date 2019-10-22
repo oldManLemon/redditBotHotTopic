@@ -57,19 +57,42 @@ def createSqlTable(tableToCreate):
               '( word VARCHAR(225) NOT NULL, word_count INT NOT NULL, updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP );')
     print(c.fetchone())
 
+def catchError(word, count):
+    if not type(word) == str:
+        raise TypeError('Word must be a string, please check your data')
+    if not type(count) == int:
+        raise TypeError('Count must be an int')
+
 
 def insertSqlData(tableName, data):
 
     if checkTableExists(tableName):
+        
         # Go ahead and insert all the data now
          for item in data:
+            #We need to check all the being added so as not to duplicate
             word = item[0]
             count = item[1]
-            c.execute("INSERT INTO {} (word, word_count) VALUES ('{}',{});".format(tableName, word, count))
-            conn.commit()
+            catchError(word,count)
+            
+            c.execute("SELECT word, word_count FROM {} WHERE word ='{}';".format(tableName,word))
+            request = c.fetchone()
+            if request == None:
+                #Word not found in list add it with all data
+                print('Did not find {} will now add it with count to list'.format(word))
+                c.execute("INSERT INTO {} (word, word_count) VALUES ('{}',{});".format(tableName, word, count))
+                conn.commit()
+            else:
+                print('Found word: {} and will add value to it only'.format(word))
+                oldNum = request
+                #print(oldNum[1])
+                newNum = count + oldNum[1]
+                c.execute("UPDATE {} SET word_count = {} WHERE word = '{}';".format(tableName,newNum,word))
+                conn.commit()
     else:
         # CREATE THE TABLE THEN ADD THE DATA
         createSqlTable(tableName)
+        print("found nothing and will start the process from scratch")
         for item in data:
             word = item[0]
             count = item[1]
@@ -78,6 +101,13 @@ def insertSqlData(tableName, data):
 
 x = sortDataForInsert('melbourne_results.xml')
 insertSqlData('melbourne', x)
+#c.execute('select word, word_count from melbourne where word = "people";')
+
+# for item in c.fetchall():
+#     print(item[1])
+#     print(type(item[1]))
+
+
 
 
 # Insert some example data.
