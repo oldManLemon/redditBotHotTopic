@@ -16,8 +16,12 @@ def wordCounter():
         for word in thread.read().split():
             word = word.lower()
             wordScannerCounter(wordScannerCounter(1))
+            
             if word in allHope.badword:
                 pass
+            elif not word.isalnum():
+                print(word)
+                word = ''.join(e for e in word if e.isalnum())
             elif word not in wordCount:
                 wordCount[word] = 1
             else:
