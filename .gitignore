@@ -7,6 +7,11 @@ __pycache__
 
 #Data collection txt file
 *.txt
-!requirements.txt
+*.xml
+
+
 #Password File
 password*
+
+#Exceptions
+!requirements.txt
