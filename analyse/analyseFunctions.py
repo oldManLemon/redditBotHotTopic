@@ -36,7 +36,9 @@ def analysis(dataForAnalysis,nameOfSubreddit):
     extra = open('working.xml', 'w+', encoding="utf-8")
     extra.write(str(wordCount))
     for item in wordCount:
-        storeData.write(str(item))
+
+        storeData.write(str(item[0])+','+str(item[1]))
+       
         storeData.write('\n')
     storeData.close()
 
