@@ -2,7 +2,7 @@
 import praw
 
 # Inbuilts
-from os import rename, listdir, rename, remove, path, mkdir
+from os import listdir
 
 
 
@@ -66,7 +66,7 @@ def readComments(submissionID):
     loging.close()
 
 
-def dataGather(limit):
+def gatherRedditThreadsAndComments(limit):
     '''
     Combines two functions together\n
     RETURNS: None, will create a LIMIT of txt files with comments\n
@@ -92,29 +92,5 @@ def listOfData():
 
 
 
-def dataCleanup(action, targetedSub):
-    getList = listOfData()
-    for item in getList:    
-        if action:
-            remove(item)
-            print(item+'.txt removed')
-        else:
-            if path.isdir('storage/'+targetedSub):
-               rename(item, 'storage/'+targetedSub+'/'+item) 
-            else:
-                mkdir('storage/'+targetedSub)
-                rename(item, 'storage/'+targetedSub+'/'+item)
+
             
-#print()
-# dataGather(config.limit)
-# analysis(wordCounter())
-# dataCleanup(config.cleanUp)
-
-
-
-# sortedWords = sorted(dataForAnalysis.keys())
-# for key in sorted(dataForAnalysis.keys()):
-#     print(key, " :: ", dataForAnalysis[key])
-# print(sortedWords)
-
-#print(len(dataForAnalysis))

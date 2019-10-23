@@ -2,7 +2,16 @@ from os import rename, listdir, rename, remove, path, mkdir
 from collections import Counter
 from dataGather import data as dataBoi
 from abandon import allHope
+#totalWordCounter = 0
 
+def wordScannerCounter(count):
+    '''
+    Ticker to count numeber of words analyised
+    ''' 
+    
+    newCount=+count
+    return newCount
+   
 def wordCounter():
     '''
     wordCounter()
@@ -15,19 +24,18 @@ def wordCounter():
         thread = open(data, 'r+', encoding="utf-8")
         for word in thread.read().split():
             word = word.lower()
-            wordScannerCounter(wordScannerCounter(1))
-            
+            #totalWordCounter += 1
             if word in allHope.badword:
                 pass
             elif not word.isalnum():
-                print(word)
+                #print(word)
                 word = ''.join(e for e in word if e.isalnum())
             elif word not in wordCount:
                 wordCount[word] = 1
             else:
                 wordCount[word] += 1
         thread.close()
-    print(wordScannerCounter(0, 'call'))
+    #print('Amount of words processed {}'.format(totalWordCounter))
     return wordCount
 
 def analysis(dataForAnalysis,nameOfSubreddit):
@@ -43,12 +51,3 @@ def analysis(dataForAnalysis,nameOfSubreddit):
     storeData.close()
 
 
-def wordScannerCounter(count, call= None):
-    '''
-    doesn't work yet suppose to be a ticker 
-    ''' 
-    if call == 'call':
-        return count
-    newCount=+count
-    return newCount
-   
