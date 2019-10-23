@@ -1,4 +1,4 @@
-
+import datetime
 # Connect to the database.
 import pymysql
 from password import sqlPassword
@@ -8,6 +8,15 @@ conn = pymysql.connect(
     passwd=sqlPassword,
     host='localhost')
 c = conn.cursor()
+
+def log(information):
+    day = datetime.date.today()
+    time = datetime.datetime.now()
+    
+    log = open(str(day)+'.log', 'a+')
+    log.write('{}: {}\n'.format(time, information))
+    log.close()
+
 
 
 
@@ -43,7 +52,8 @@ def checkTableExists(tableToCheck):
 def createSqlTable(tableToCreate):
     c.execute('CREATE TABLE IF NOT EXISTS '+tableToCreate +
               '( word VARCHAR(225) NOT NULL, word_count INT NOT NULL, updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP );')
-    print(c.fetchone())
+    #print(c.fetchone())
+    log('Created new table {}'.format(tableToCreate))
 
 def catchError(word, count):
     if not type(word) == str:
@@ -67,11 +77,11 @@ def insertSqlData(tableName, data):
             request = c.fetchone()
             if request == None:
                 #Word not found in list add it with all data
-                print('Did not find {} will now add it with count to list'.format(word))
+                log('Did not find {} will now add it with count to list'.format(word))
                 c.execute("INSERT INTO {} (word, word_count) VALUES ('{}',{});".format(tableName, word, count))
                 conn.commit()
             else:
-                print('Found word: {} and will add value to it only'.format(word))
+                log('Found word: will add new count to {}'.format(word))
                 oldNum = request
                 #print(oldNum[1])
                 newNum = count + oldNum[1]
@@ -80,15 +90,16 @@ def insertSqlData(tableName, data):
     else:
         # CREATE THE TABLE THEN ADD THE DATA
         createSqlTable(tableName)
-        print("found nothing and will start the process from scratch")
+        
         for item in data:
             word = item[0]
             count = item[1]
+            log('Did not find {} will now add it with count to list'.format(word))
             c.execute("INSERT INTO {} (word, word_count) VALUES ('{}',{});".format(tableName, word, count))
             conn.commit()
 
-# x = sortDataForInsert('melbourne_results.xml')
-# insertSqlData('melbourne', x)
+x = sortDataForInsert('brisbane_results.xml')
+insertSqlData('brisbane', x)
 
 
 

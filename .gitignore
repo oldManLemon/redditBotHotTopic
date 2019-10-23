@@ -8,6 +8,7 @@ __pycache__
 #Data collection txt file
 *.txt
 *.xml
+*.log
 
 
 #Password File
