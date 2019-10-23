@@ -2,10 +2,11 @@ import datetime
 # Connect to the database.
 import pymysql
 from password import sqlPassword
+
 conn = pymysql.connect(
     db='popular',
     user='popularBot',
-    passwd=sqlPassword,
+    passwd= sqlPassword,
     host='localhost')
 c = conn.cursor()
 
@@ -97,9 +98,15 @@ def insertSqlData(tableName, data):
             log('Did not find {} will now add it with count to list'.format(word))
             c.execute("INSERT INTO {} (word, word_count) VALUES ('{}',{});".format(tableName, word, count))
             conn.commit()
+    
+    return True
 
-x = sortDataForInsert('brisbane_results.xml')
-insertSqlData('brisbane', x)
+
+
+def getSubRedditResults(targetRedditSub):
+    dataFile = '{}_results.xml'.format(targetRedditSub)
+    return dataFile
+
 
 
 

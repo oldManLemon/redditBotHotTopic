@@ -18,7 +18,7 @@ def wordCounter():
     returns: dict of words and their count
     '''
     wordCount = {}
-    dataFiles = dataBoi.listOfData()
+    dataFiles = dataBoi.listOfData('txt')
     
     for data in dataFiles:
         thread = open(data, 'r+', encoding="utf-8")

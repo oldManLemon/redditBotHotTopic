@@ -79,18 +79,18 @@ def gatherRedditThreadsAndComments(limit):
         readComments(data)
 
 
-def listOfData():
+def listOfData(endingType):
     '''
     listOfData()
     returns: array of all txt's in folder
     '''
     listOfFilenames = []
     for filename in listdir():
-        if filename.endswith('txt'):
+        if filename.endswith(endingType):
             listOfFilenames.append(filename)
     return listOfFilenames
 
 
 
 
-            
+print(reddit)            
