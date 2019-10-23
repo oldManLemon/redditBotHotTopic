@@ -8,7 +8,8 @@ def dataCleanup(action, targetedSub, dataType):
     for item in getList:    
         if action:
             remove(item)
-            print('{}.{} removed'.format(targetedSub, dataType))
+            
+            print('{}.{} removed'.format(item, dataType))
             #print(item+'.txt removed')
         else:
             if path.isdir('storage/'+targetedSub):
