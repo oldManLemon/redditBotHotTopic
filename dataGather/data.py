@@ -22,20 +22,23 @@ reddit = praw.Reddit(client_id=config.clientID,
                      username=config.username)
 
 try:
-    print(reddit.user.me())
+   if reddit.user.me() == 'popularWordBot':
+       print('Login Successful')
 except:
     print('login in issues')
    
 
-sub = reddit.subreddit(config.targetSub)
 
 
 
-def gatherHotPage(limit):
+
+def gatherHotPage(limit, targetSub):
     '''
+    Args: Limit: number, targetSub: str
     limit is the amount of posts to scan
     Returns array of reddit PostID's
     '''
+    sub = reddit.subreddit(targetSub)
     postID = []
     for submission in sub.hot(limit=limit):
         loging = open(submission.id+'.txt', 'w+', encoding="utf-8")
@@ -66,7 +69,7 @@ def readComments(submissionID):
     loging.close()
 
 
-def gatherRedditThreadsAndComments(limit):
+def gatherRedditThreadsAndComments(limit, targetSub):
     '''
     Combines two functions together\n
     RETURNS: None, will create a LIMIT of txt files with comments\n
@@ -74,7 +77,7 @@ def gatherRedditThreadsAndComments(limit):
     readComments(postID): creates postID.txt with all comments of postID\n
     CALL THIS FUNCTION IN MAIN!
     '''
-    analyse = gatherHotPage(limit)
+    analyse = gatherHotPage(limit, targetSub)
     for data in analyse:
         readComments(data)
 
@@ -93,4 +96,4 @@ def listOfData(endingType):
 
 
 
-print(reddit)            
+         
