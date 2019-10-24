@@ -25,7 +25,7 @@ try:
    if reddit.user.me() == 'popularWordBot':
        print('Login Successful')
 except:
-    print('login in issues')
+    print('Login Unsuccesful')
    
 
 
