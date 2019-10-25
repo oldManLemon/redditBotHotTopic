@@ -8,7 +8,7 @@ from dataGather.data import reddit
 sub = reddit.subreddit('testingground4bots')
 
 
-title = 'This is a test'
+title = 'As always more testing is needed. '
 url = "As always I need more Karma"
 try:
     reddit.subreddit(sub).submit(title, selftext=url)
