@@ -36,21 +36,21 @@ Here are the top {} words from r/{}\n\n
         body += line
     body += '''
 
-I am a poorly programmed bot. 
-Please note I am in the early stages of development and I will likly continue to wittle down important words and even phrases
-If you have any suggestions/complaints/issues please PM me or raise an issue [here](https://github.com/oldManLemon/redditBotHotTopic/issues/new)
+I am a bot, possibly a poorly programmed one. 
+I am in beta and I will continue to wittle down important words and even phrases to see more interesting patterns. 
+If you have any suggestions/complaints/issues please PM me
 
     '''
     hasPosted = False    
     while hasPosted == False:
         
         try:
-            
-            #reddit.subreddit('testingground4bots').submit(title, selftext=body)
-            f=open('table.txt', 'a+', encoding='utf8')
-            f.write(title)
-            f.write(body)
-            f.close()
+            reddit.subreddit('testingground4bots').submit(title, selftext=body)
+            # f=open('table.txt', 'a+', encoding='utf8')
+            # f.write(title)
+            # f.write(body)
+            # f.close()
+            print('Success')
             hasPosted= True
 
         except:
