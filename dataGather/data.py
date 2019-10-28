@@ -2,7 +2,7 @@
 import praw
 
 # Inbuilts
-from os import listdir
+from os import listdir, path
 
 
 
@@ -41,13 +41,32 @@ def gatherHotPage(limit, targetSub):
     sub = reddit.subreddit(targetSub)
     postID = []
     for submission in sub.hot(limit=limit):
-        loging = open(submission.id+'.txt', 'w+', encoding="utf-8")
-        loging.write(str(submission.title)+'\n')
-        loging.close()
-        postID.append(submission.id)
+        if not checkSubmissionHasBeenScanned(submission.id):
+            addSubmissionToList(submission.id)
+            loging = open(submission.id+'.txt', 'w+', encoding="utf-8")
+            loging.write(str(submission.title)+'\n')
+            loging.close()
+            postID.append(submission.id)
 
     return postID
 
+def addSubmissionToList(submission):
+    subChecker = open('storage/subIDList', 'a+')
+    subChecker.write(submission+'\n')
+    subChecker.close()
+
+def checkSubmissionHasBeenScanned(submission):
+   #Check to see if file exists or not
+    try: 
+        open('storage/subIDList')
+             
+    except:
+        print('file not found')
+        return False
+    
+    with open('storage/subIDList') as subChecker:
+        if str(submission) in subChecker.read():
+            return True
 
 def readComments(submissionID):
     '''
