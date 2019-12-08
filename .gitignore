@@ -16,3 +16,5 @@ password*
 
 #Exceptions
 !requirements.txt
+storage/subIDList
+dead.py.die

@@ -31,8 +31,7 @@ def gatherHotPage(limit, targetSub):
     '''
     Args: Limit: number, targetSub: str
     limit is the amount of posts to scan
-    Returns array of reddit PostID's that have previously
-    being scanned
+    Returns array of reddit PostID's 
     '''
     sub = reddit.subreddit(targetSub)
     postID = []
@@ -48,6 +47,12 @@ def gatherHotPage(limit, targetSub):
 
 
 def addSubmissionToList(submission):
+    '''
+    Args: submission ID
+    Adds a submission ID to a file so that it will not be scanned and double counted
+    Returns None
+
+    '''
     if path.isdir('storage'):
         subChecker = open('storage/subIDList', 'a+')
         subChecker.write(submission+'\n')
