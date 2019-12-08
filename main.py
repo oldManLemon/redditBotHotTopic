@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 from dataGather import gatherRedditData,cleanUp
 from dataAnalysis import runDataAnalysis
 from sql import pushToDataBase
@@ -12,13 +14,9 @@ import sys
 #Results should be a bunch of txt files with thread titles and comments inside of them
 def dataCollect():
     for item in config.targetSub:
-
         gatherRedditData(config.limit, item)
-
-
         #Here we scan each of the txt docs and count the total number of times a word is used
         runDataAnalysis(item)
-
         #SQL DataPush
         pushToDataBase(item)
 
