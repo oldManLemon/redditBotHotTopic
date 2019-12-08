@@ -2,8 +2,7 @@
 import praw
 
 # Inbuilts
-from os import listdir, path
-
+from os import listdir, path, mkdir
 
 
 # just import the password
@@ -22,21 +21,18 @@ reddit = praw.Reddit(client_id=config.clientID,
                      username=config.username)
 
 try:
-   if reddit.user.me() == 'popularWordBot':
-       print('Login Successful')
+    if reddit.user.me() == 'popularWordBot':
+        print('Login Successful')
 except:
     print('Login Unsuccesful')
-   
-
-
-
 
 
 def gatherHotPage(limit, targetSub):
     '''
     Args: Limit: number, targetSub: str
     limit is the amount of posts to scan
-    Returns array of reddit PostID's
+    Returns array of reddit PostID's that have previously
+    being scanned
     '''
     sub = reddit.subreddit(targetSub)
     postID = []
@@ -50,23 +46,30 @@ def gatherHotPage(limit, targetSub):
 
     return postID
 
+
 def addSubmissionToList(submission):
-    subChecker = open('storage/subIDList', 'a+')
-    subChecker.write(submission+'\n')
-    subChecker.close()
+    if path.isdir('storage'):
+        subChecker = open('storage/subIDList', 'a+')
+        subChecker.write(submission+'\n')
+        subChecker.close()
+    else:
+        print('make storage')
+        mkdir('storage')
+   
 
 def checkSubmissionHasBeenScanned(submission):
-   #Check to see if file exists or not
-    try: 
+    # Check to see if file exists or not
+    try:
         open('storage/subIDList')
-             
+
     except:
         print('file not found')
         return False
-    
+
     with open('storage/subIDList') as subChecker:
         if str(submission) in subChecker.read():
             return True
+
 
 def readComments(submissionID):
     '''
@@ -111,8 +114,3 @@ def listOfData(endingType):
         if filename.endswith(endingType):
             listOfFilenames.append(filename)
     return listOfFilenames
-
-
-
-
-         

@@ -13,7 +13,6 @@ c = conn.cursor()
 def log(information):
     day = datetime.date.today()
     time = datetime.datetime.now()
-    
     log = open(str(day)+'.log', 'a+')
     log.write('{}: {}\n'.format(time, information))
     log.close()
@@ -72,22 +71,30 @@ def insertSqlData(tableName, data):
             #We need to check all the being added so as not to duplicate
             word = item[0]
             count = item[1]
+            word = str(word)
+            
             catchError(word,count)
             
             c.execute("SELECT word, word_count FROM {} WHERE word ='{}';".format(tableName,word))
             request = c.fetchone()
             if request == None:
                 #Word not found in list add it with all data
-                log('Did not find {} will now add it with count to list'.format(word))
+                #log('Did not find {} will now add it with count to list'.format(word))
                 c.execute("INSERT INTO {} (word, word_count) VALUES ('{}',{});".format(tableName, word, count))
-                conn.commit()
+                try:
+                    conn.commit()
+                except:
+                    log("INSERT INTO {} (word, word_count) VALUES ('{}',{}); -- FAILED".format(tableName, word, count))
             else:
-                log('Found word: will add new count to {}'.format(word))
+                #log('Found word: will add new count to {}'.format(word))
                 oldNum = request
                 #print(oldNum[1])
                 newNum = count + oldNum[1]
                 c.execute("UPDATE {} SET word_count = {} WHERE word = '{}';".format(tableName,newNum,word))
-                conn.commit()
+                try:
+                    conn.commit()
+                except:
+                    log("UPDATE {} SET word_count = {} WHERE word = '{}'; -- FAILED".format(tableName,newNum,word))
     else:
         # CREATE THE TABLE THEN ADD THE DATA
         createSqlTable(tableName)
@@ -95,9 +102,12 @@ def insertSqlData(tableName, data):
         for item in data:
             word = item[0]
             count = item[1]
-            log('Did not find {} will now add it with count to list'.format(word))
+            #log('Did not find {} will now add it with count to list'.format(word))
             c.execute("INSERT INTO {} (word, word_count) VALUES ('{}',{});".format(tableName, word, count))
-            conn.commit()
+            try:
+                conn.commit()
+            except:
+                log("INSERT INTO {} (word, word_count) VALUES ('{}',{}); -- FAILED".format(tableName, word, count))
     
     return True
 
